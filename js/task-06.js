@@ -1,36 +1,41 @@
- function getRandomHexColor() {
-    return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
-  }
+function getRandomHexColor() {
+        return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+      }
 
-  function createBoxes() {
-    const inputAmount = document.getElementById('inputAmount');
-    const amount = parseInt(inputAmount.value);
+      function createBoxes(amount) {
+        const boxesContainer = document.getElementById('boxes');
+        boxesContainer.innerHTML = '';
 
-    if (isNaN(amount) || amount < 1 || amount > 100) {
-      alert('Please enter a number between 1 and 100.');
-      return;
-    }
+        let boxSize = 30;
 
-    const boxesContainer = document.getElementById('boxes');
-    boxesContainer.innerHTML = '';
+        for (let i = 0; i < amount; i++) {
+          const box = document.createElement('div');
+          box.style.width = `${boxSize}px`;
+          box.style.height = `${boxSize}px`;
+          box.style.backgroundColor = getRandomHexColor();
+          box.classList.add('box');
+          boxesContainer.appendChild(box);
 
-    let boxSize = 30;
+          boxSize += 10;
+        }
 
-    for (let i = 0; i < amount; i++) {
-      const box = document.createElement('div');
-      box.style.width = `${boxSize}px`;
-      box.style.height = `${boxSize}px`;
-      box.style.backgroundColor = getRandomHexColor();
-      box.classList.add('box');
-      boxesContainer.appendChild(box);
+        document.getElementById('inputAmount').value = '';
+      }
 
-      boxSize += 10;
-    }
+      function destroyBoxes() {
+        const boxesContainer = document.getElementById('boxes');
+        boxesContainer.innerHTML = '';
+      }
 
-    inputAmount.value = ''; // Clear the input
-  }
+      document.querySelector('[data-create]').addEventListener('click', function () {
+        const inputAmount = document.getElementById('inputAmount');
+        const amount = parseInt(inputAmount.value);
 
-  function destroyBoxes() {
-    const boxesContainer = document.getElementById('boxes');
-    boxesContainer.innerHTML = '';
-  }
+        if (!isNaN(amount) && amount >= 1 && amount <= 100) {
+          createBoxes(amount);
+        } else {
+          alert('Please enter a number between 1 and 100.');
+        }
+      });
+
+      document.querySelector('[data-destroy]').addEventListener('click', destroyBoxes);
